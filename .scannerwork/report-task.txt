@@ -1,0 +1,6 @@
+projectKey=tp2
+serverUrl=http://localhost:9000
+serverVersion=10.7.0.96327
+dashboardUrl=http://localhost:9000/dashboard?id=tp2
+ceTaskId=ac913528-22a6-4575-a717-1e529355d0a4
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ac913528-22a6-4575-a717-1e529355d0a4

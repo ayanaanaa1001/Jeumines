@@ -1,0 +1,6 @@
+projectKey=jeuProject
+serverUrl=http://localhost:9000
+serverVersion=10.7.0.96327
+dashboardUrl=http://localhost:9000/dashboard?id=jeuProject
+ceTaskId=751a0ee7-f4e2-4ac9-86a2-898391381a5e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=751a0ee7-f4e2-4ac9-86a2-898391381a5e
