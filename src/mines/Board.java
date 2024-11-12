@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -117,57 +119,33 @@ public class Board extends JPanel {
 
     public void find_empty_cells(int j) {
         int current_col = j % cols;
-        int cell;
+        Queue<Integer> toVisit = new LinkedList<>();
+        toVisit.add(j);
 
-        if (current_col > 0) {
-            cell = j - cols - 1;
-            if (cell >= 0 && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-            }
+        while (!toVisit.isEmpty()) {
+            int current = toVisit.poll();
+            int cell;
 
-            cell = j - 1;
-            if (cell >= 0 && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-            }
+            // Process all adjacent cells around the current cell
+            for (int dRow = -1; dRow <= 1; dRow++) {
+                for (int dCol = -1; dCol <= 1; dCol++) {
+                    if (dRow == 0 && dCol == 0) continue; // Skip the cell itself
 
-            cell = j + cols - 1;
-            if (cell < all_cells && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-            }
-        }
+                    int newRow = (current / cols) + dRow;
+                    int newCol = (current % cols) + dCol;
 
-        cell = j - cols;
-        if (cell >= 0 && field[cell] > MINE_CELL) {
-            field[cell] -= COVER_FOR_CELL;
-            if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-        }
+                    if (isWithinBounds(newRow, newCol)) {
+                        int newPosition = newRow * cols + newCol;
+                        cell = field[newPosition];
 
-        cell = j + cols;
-        if (cell < all_cells && field[cell] > MINE_CELL) {
-            field[cell] -= COVER_FOR_CELL;
-            if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-        }
-
-        if (current_col < (cols - 1)) {
-            cell = j - cols + 1;
-            if (cell >= 0 && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-            }
-
-            cell = j + cols + 1;
-            if (cell < all_cells && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
-            }
-
-            cell = j + 1;
-            if (cell < all_cells && field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) find_empty_cells(cell);
+                        if (cell > MINE_CELL) {
+                            field[newPosition] -= COVER_FOR_CELL;
+                            if (field[newPosition] == EMPTY_CELL) {
+                                toVisit.add(newPosition);  // Add to queue for further checking
+                            }
+                        }
+                    }
+                }
             }
         }
     }
